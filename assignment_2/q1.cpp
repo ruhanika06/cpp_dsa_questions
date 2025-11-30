@@ -2,91 +2,42 @@
 #include <vector>
 using namespace std;
 
+int binarySearch(vector<int> &arr, int target) {
+    int left = 0;
+    int right = arr.size() - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2; // avoid overflow
+
+        if (arr[mid] == target)
+            return mid;
+
+        else if (arr[mid] < target)
+            left = mid + 1;
+
+        else
+            right = mid - 1;
+    }
+    return -1; // target not found
+}
+
 int main() {
     int n;
-    cout << "Enter size of square matrix (n x n): ";
     cin >> n;
 
-    vector<vector<int>> mat(n, vector<int>(n));
-    cout << "Enter elements of the matrix:\n";
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            cin >> mat[i][j];
-        }
-    }
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];   // ARRAY MUST BE SORTED
 
-    // (a) Diagonal Matrix
-    cout << "\n(a) Diagonal Matrix:\n";
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (i == j)
-                cout << mat[i][j] << " ";
-            else
-                cout << "0 ";
-        }
-        cout << endl;
-    }
+    int target;
+    cin >> target;
 
-    // (b) Tri-diagonal Matrix
-    cout << "\n(b) Tri-diagonal Matrix:\n";
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (abs(i - j) <= 1) // main + upper + lower diagonal
-                cout << mat[i][j] << " ";
-            else
-                cout << "0 ";
-        }
-        cout << endl;
-    }
+    int result = binarySearch(arr, target);
 
-    // (c) Lower Triangular Matrix
-    cout << "\n(c) Lower Triangular Matrix:\n";
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (i >= j)
-                cout << mat[i][j] << " ";
-            else
-                cout << "0 ";
-        }
-        cout << endl;
-    }
-
-    // (d) Upper Triangular Matrix
-    cout << "\n(d) Upper Triangular Matrix:\n";
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (i <= j)
-                cout << mat[i][j] << " ";
-            else
-                cout << "0 ";
-        }
-        cout << endl;
-    }
-
-    // (e) Symmetric Matrix (check + display)
-    bool symmetric = true;
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (mat[i][j] != mat[j][i]) {
-                symmetric = false;
-                break;
-            }
-        }
-        if (!symmetric) break;
-    }
-
-    cout << "\n(e) Symmetric Matrix:\n";
-    if (symmetric) {
-        cout << "The given matrix is Symmetric.\n";
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                cout << mat[i][j] << " ";
-            }
-            cout << endl;
-        }
-    } else {
-        cout << "The given matrix is NOT Symmetric.\n";
-    }
+    if (result != -1)
+        cout << "Element found at index: " << result;
+    else
+        cout << "Element not found";
 
     return 0;
 }
