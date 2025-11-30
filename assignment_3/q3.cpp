@@ -1,27 +1,43 @@
-#include<iostream>
-#include<stack>
+#include <iostream>
+#include <stack>
+#include <string>
 using namespace std;
 
-int main(){
-    string str;
-    cout << "Enter a string: ";
-    getline(cin, str);
-
+bool isBalanced(string s) {
     stack<char> st;
 
-    // Push all characters into stack
-    for (int i = 0; i < str.length(); i++) {
-    st.push(str[i]);
+    for (char c : s) {
+
+        // If opening bracket, push
+        if (c == '(' || c == '{' || c == '[') {
+            st.push(c);
+        }
+        // If closing bracket, check match
+        else if (c == ')' || c == '}' || c == ']') {
+
+            if (st.empty()) return false;
+
+            char top = st.top();
+            st.pop();
+
+            if ((c == ')' && top != '(') ||
+                (c == '}' && top != '{') ||
+                (c == ']' && top != '['))
+                return false;
+        }
     }
 
+    return st.empty();  // stack must be empty
+}
 
-    // Pop all characters to get reversed string
-    string reversed = "";
-    while (!st.empty()) {
-        reversed += st.top();
-        st.pop();
-    }
+int main() {
+    string expr;
+    getline(cin, expr);
 
-    cout << "Reversed string: " << reversed << endl;
+    if (isBalanced(expr))
+        cout << "Balanced";
+    else
+        cout << "Not Balanced";
+
     return 0;
 }
