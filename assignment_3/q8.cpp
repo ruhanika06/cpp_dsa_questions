@@ -1,58 +1,38 @@
 #include <iostream>
+#include <vector>
+#include <stack>
 using namespace std;
-
-class Stack {
-    int *arr;
-    int topIdx, cap;
-public:
-    Stack(int c) { cap=c; arr=new int[c]; topIdx=-1; }
-    ~Stack() { delete[] arr; }
-
-    bool isEmpty() { return topIdx==-1; }
-    bool isFull() { return topIdx==cap-1; }
-
-    void push(int x) {
-        if(!isFull()) arr[++topIdx]=x;
-    }
-
-    int pop() {
-        if(isEmpty()) return -1;
-        return arr[topIdx--];
-    }
-
-    int top() {
-        if(isEmpty()) return -1;
-        return arr[topIdx];
-    }
-};
 
 int main() {
     int n;
-    cout << "Enter size of array: ";
     cin >> n;
 
-    int arr[n], nge[n];
-    cout << "Enter array elements: ";
-    for(int i=0; i<n; i++) cin >> arr[i];
+    vector<int> arr(n), nge(n);
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
 
-    Stack s(n);
+    stack<int> st;
 
-    for(int i=n-1; i>=0; i--) {
-        while(!s.isEmpty() && s.top() <= arr[i])
-            s.pop();
+    for (int i = n - 1; i >= 0; i--) {
 
-        if(s.isEmpty())
+        // Remove smaller or equal elements
+        while (!st.empty() && st.top() <= arr[i]) {
+            st.pop();
+        }
+
+        // If stack empty → no greater element
+        if (st.empty())
             nge[i] = -1;
         else
-            nge[i] = s.top();
+            nge[i] = st.top();
 
-        s.push(arr[i]);
+        // Push current element
+        st.push(arr[i]);
     }
 
-    cout << "Next Greater Elements:\n";
-    for(int i=0; i<n; i++)
-        cout << nge[i] << " ";
-    cout << endl;
+    // Print result
+    for (int x : nge)
+        cout << x << " ";
 
     return 0;
 }
